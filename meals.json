@@ -1,0 +1,98 @@
+[
+  {
+    "m_id": 52202,
+    "date": "2025-04-02",
+    "location": "Salatbüfett",
+    "dish_name": "Erdnuss-Kokos-Pasta",
+    "title_with_additives": "Erdnuss-Kokos-Pasta",
+    "price": "3,50 €",
+    "description": "Veganes Menü",
+    "meal_type": "Salatbüfett",
+    "image": "",
+    "icon": "vegan"
+  },
+  {
+    "m_id": 54313,
+    "date": "2025-04-02",
+    "location": "Grill",
+    "dish_name": "Hähnchenbrustfilet",
+    "title_with_additives": "Hähnchenbrustfilet",
+    "price": "4,45 €",
+    "description": "Hähnchenbrustfilet mit Rahmsoße, Spätzle, dazu einen Beilagensalat nach Wahl",
+    "meal_type": "Grill",
+    "image": "",
+    "icon": "chicken"
+  },
+  {
+    "m_id": 57490,
+    "date": "2025-04-02",
+    "location": "Essen 1",
+    "dish_name": "Crazy friesday",
+    "title_with_additives": "Crazy friesday",
+    "price": "3,80 €",
+    "description": "mit Falafel, Barbecuesoße, Frühlinsgzwiebeln, bunter Paprika und vegane Limettenmayonnaise, dazu Salat",
+    "meal_type": "Essen 1",
+    "image": "",
+    "icon": "vegan"
+  },
+  {
+    "m_id": 58627,
+    "date": "2025-04-03",
+    "location": "Essen 1",
+    "dish_name": "Hähnchen-Cordon-Bleu mit Kroketten",
+    "title_with_additives": "Hähnchen-Cordon-Bleu mit Kroketten",
+    "price": "3,80 €",
+    "description": "mit Bratensoße, Kroketten und Blumenkohl Gemüse",
+    "meal_type": "Essen 1",
+    "image": "",
+    "icon": "chicken"
+  },
+  {
+    "m_id": 55328,
+    "date": "2025-04-03",
+    "location": "Salatbüfett",
+    "dish_name": "Gemüsecurry mit Wildreis",
+    "title_with_additives": "Gemüsecurry mit Wildreis",
+    "price": "3,50 €",
+    "description": "Veganes Menü",
+    "meal_type": "Salatbüfett",
+    "image": "",
+    "icon": "vegan"
+  },
+  {
+    "m_id": 52328,
+    "date": "2025-04-03",
+    "location": "Grill",
+    "dish_name": "Campus Burger",
+    "title_with_additives": "Campus Burger",
+    "price": "4,70 €",
+    "description": "Campus Chili Cheese Burger: BIO-Rindfleisch belegt mit Chili-Cheese-Sauce, Tomaten und Eisberg im Brioche Burger Bun, dazu Potato-Wedges und ein Beilagesalat nach Wahl",
+    "meal_type": "Grill",
+    "image": "",
+    "icon": "beef"
+  },
+  {
+    "m_id": 52198,
+    "date": "2025-04-04",
+    "location": "Essen 2",
+    "dish_name": "Grüne Tortellini in Tomatensoße",
+    "title_with_additives": "Grüne Tortellini in Tomatensoße",
+    "price": "3,50 €",
+    "description": "Veganes Menü",
+    "meal_type": "Essen 2",
+    "image": "",
+    "icon": "vegan"
+  },
+  {
+    "m_id": 53016,
+    "date": "2025-04-04",
+    "location": "Essen 1",
+    "dish_name": "Ungarische Gulaschsuppe",
+    "title_with_additives": "Ungarische Gulaschsuppe",
+    "price": "3,80 €",
+    "description": "dazu eine große Dampfnudel mit Vanillesoße",
+    "meal_type": "Essen 1",
+    "image": "",
+    "icon": "beef"
+  }
+]
