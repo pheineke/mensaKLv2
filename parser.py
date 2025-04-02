@@ -12,6 +12,7 @@ from db_driver import MealDatabase
 import requests
 import re
 import logging
+import random
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -145,12 +146,21 @@ class MealParser:
             prices = self.get_prices(price_text)
             
             # Check for vegetarian/vegan alternatives
-            # vegan_alt = std_card.find('div', class_='vegan')
-            # alternative = None
-            # if vegan_alt:
-            #     alt_title = vegan_alt.find('h3', class_='alternative')
-            #     if alt_title:
-            #         alternative = alt_title.text.strip()
+            vegetarian_alt = card.find('div', class_='vegetarian')
+            vegan_alt = card.find('div', class_='vegan')
+            
+            vegetarian_alternative = None
+            vegan_alternative = None
+            
+            if vegetarian_alt:
+                veg_title = vegetarian_alt.find('h3', class_='alternative')
+                if veg_title:
+                    vegetarian_alternative = veg_title.text.strip()
+            
+            if vegan_alt:
+                veg_title = vegan_alt.find('h3', class_='alternative')
+                if veg_title:
+                    vegan_alternative = veg_title.text.strip()
             
             meal_info = self.meal_info(
                 date=date, 
@@ -158,7 +168,9 @@ class MealParser:
                 meal_type=meal_type, 
                 dish_name=dish_name, 
                 description=description_text, 
-                prices=prices)
+                prices=prices,
+                vegetarian_alternative=vegetarian_alternative,
+                vegan_alternative=vegan_alternative)
             
             meals.append(meal_info)
             print(f"Successfully parsed meal: {dish_name}")
@@ -210,7 +222,8 @@ class MealParser:
         print(prices)
         return prices
 
-    def meal_info(self, date, location, meal_type, dish_name, description, prices):
+    def meal_info(self, date, location, meal_type, dish_name, description, prices, 
+                 vegetarian_alternative=None, vegan_alternative=None):
         # Generate a unique ID for the meal
         m_id = 50000 + hash(f"{date.strftime('%Y-%m-%d')}_{location}_{dish_name}") % 10000
         
@@ -231,7 +244,9 @@ class MealParser:
             'description': description,
             'meal_type': meal_type,
             'image': '',  # No image for now
-            'icon': icon
+            'icon': icon,
+            'vegetarian_alternative': vegetarian_alternative,
+            'vegan_alternative': vegan_alternative
         }
         
         return meal_info
@@ -369,7 +384,7 @@ def scrape_meals():
         # Send GET request to the URL
         response = requests.get(url)
         response.raise_for_status()  # Raise an exception for bad status codes
-        
+
         # Parse the HTML content
         soup = BeautifulSoup(response.text, 'html.parser')
         
@@ -479,12 +494,56 @@ def scrape_meals():
         logger.error(f"Error during scraping: {e}")
         raise
 
+def add_example_alternatives():
+    """Add example vegetarian/vegan alternatives to existing meals for testing."""
+    db = MealDatabase()
+    meals = db.get_all_meals()
+    
+    # Example alternatives
+    vegetarian_options = [
+        "Gemüsepfanne mit Kartoffeln",
+        "Käse-Spätzle mit Röstzwiebeln",
+        "Spinat-Ricotta-Cannelloni",
+        "Gegrillter Halloumi mit Gemüse",
+        "Kräuterrisotto mit Parmesan"
+    ]
+    
+    vegan_options = [
+        "Gebratener Tofu mit Gemüse",
+        "Linsen-Curry mit Basmatireis",
+        "Vegane Gemüse-Bolognese",
+        "Gefüllte Paprika mit Couscous",
+        "Süßkartoffel-Kichererbsen-Eintopf"
+    ]
+    
+    # Add alternatives to non-vegetarian/vegan meals
+    for meal in meals:
+        if meal.get('icon') != 'vegan':  # Only add alternatives to non-vegan meals
+            # 70% chance to add vegetarian alternative
+            if random.random() < 0.7:
+                meal['vegetarian_alternative'] = random.choice(vegetarian_options)
+            
+            # 50% chance to add vegan alternative
+            if random.random() < 0.5:
+                meal['vegan_alternative'] = random.choice(vegan_options)
+    
+    # Save updated meals back to database
+    db.save_meals(meals)
+    print(f"Added example alternatives to {len(meals)} meals")
+    
+    # Export to JSON
+    db.export_to_json()
+    print("Exported updated meals to meals.json")
+
 # Example usage
 if __name__ == "__main__":
     print("Starting script...")
     
     parser = MealParser()
     parser.scrape_and_save_meals()
+    
+    # Add example alternatives for testing
+    add_example_alternatives()
     
     scrape_meals()
     

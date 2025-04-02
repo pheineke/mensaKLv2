@@ -5,64 +5,481 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mensa Speiseplan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        /* Default Theme */
+        :root {
+            --primary-color: #28a745;
+            --secondary-color: #6c757d;
+            --bg-color: #ffffff;
+            --text-color: #212529;
+            --header-bg: #e9ecef;
+            --card-bg: #ffffff;
+            --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            --font-family: 'Arial', sans-serif;
+        }
+        
+        /* Pirate Theme */
+        body.theme-pirate {
+            --primary-color: #d4af37;
+            --secondary-color: #8b4513;
+            --bg-color: #f5deb3;
+            --text-color: #000000;
+            --header-bg: #8b4513;
+            --card-bg: #f8f0dd;
+            --card-shadow: 0 4px 8px rgba(139, 69, 19, 0.5);
+            --font-family: 'Palatino Linotype', serif;
+        }
+        
+        /* Additional Pirate Theme Styles */
+        body.theme-pirate .meal-card {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.05"><path d="M30,10 L70,10 L90,50 L70,90 L30,90 L10,50 Z" fill="none" stroke="rgb(139,69,19)" stroke-width="2" /></svg>');
+        }
+        
+        body.theme-pirate h1, body.theme-pirate h2 {
+            font-family: 'Georgia', serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        body.theme-pirate .site-header {
+            background-image: linear-gradient(to right, #8b4513, #a0522d);
+            color: #d4af37;
+            border-bottom: 3px solid #d4af37;
+        }
+        
+        body.theme-pirate .theme-button {
+            background-color: #d4af37;
+            color: #8b4513;
+        }
+        
+        /* Cyberpunk Theme */
+        body.theme-cyberpunk {
+            --primary-color: #00ffff;
+            --secondary-color: #ff00ff;
+            --bg-color: #121212;
+            --text-color: #00ffff;
+            --header-bg: #1a1a1a;
+            --card-bg: #1e1e1e;
+            --card-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            --font-family: 'Courier New', monospace;
+        }
+        
+        /* Additional Cyberpunk Theme Styles */
+        body.theme-cyberpunk .meal-card {
+            border: 1px solid #00ffff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body.theme-cyberpunk .meal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff);
+            animation: cyberpunkScan 3s linear infinite;
+        }
+        
+        @keyframes cyberpunkScan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        body.theme-cyberpunk h1, body.theme-cyberpunk h2 {
+            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+            font-weight: bold;
+        }
+        
+        body.theme-cyberpunk .site-header {
+            background-image: linear-gradient(to right, #121212, #1e1e1e);
+            border-bottom: 2px solid #ff00ff;
+        }
+        
+        body.theme-cyberpunk .date-header {
+            border-left: 3px solid #ff00ff;
+        }
+        
+        body.theme-cyberpunk .theme-button {
+            background-color: #1e1e1e;
+            border: 1px solid #00ffff;
+            color: #00ffff;
+            text-shadow: 0 0 5px #00ffff;
+        }
+        
+        /* Medieval Theme */
+        body.theme-medieval {
+            --primary-color: #8B0000;
+            --secondary-color: #4B4B4B;
+            --bg-color: #E8E1D1;
+            --text-color: #2A2522;
+            --header-bg: #4B4B4B;
+            --card-bg: #F0EAD6;
+            --card-shadow: 0 5px 10px rgba(43, 40, 37, 0.4);
+            --font-family: 'Cinzel', 'Times New Roman', serif;
+        }
+        
+        /* Additional Medieval Theme Styles */
+        body.theme-medieval .meal-card {
+            border: none;
+            border-radius: 0;
+            position: relative;
+            background-color: var(--card-bg);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            padding: 3px;
+        }
+        
+        body.theme-medieval .meal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid #8B0000;
+            pointer-events: none;
+        }
+        
+        body.theme-medieval .meal-card::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: 6px;
+            bottom: 6px;
+            border: 1px solid #2A2522;
+            pointer-events: none;
+        }
+        
+        body.theme-medieval h1, body.theme-medieval h2 {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #2A2522;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        body.theme-medieval h1 {
+            position: relative;
+            display: inline-block;
+        }
+        
+        body.theme-medieval h1::before,
+        body.theme-medieval h1::after {
+            content: "❧";
+            display: inline-block;
+            color: #8B0000;
+            margin: 0 15px;
+            font-size: 1.2em;
+        }
+        
+        body.theme-medieval .site-header {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.1"><path d="M0,0 L100,0 L100,20 L80,20 L80,40 L100,40 L100,60 L80,60 L80,80 L100,80 L100,100 L0,100 L0,80 L20,80 L20,60 L0,60 L0,40 L20,40 L20,20 L0,20 Z" fill="rgb(139,0,0)" /></svg>'), linear-gradient(to bottom, #4B4B4B, #353535);
+            color: #E8E1D1;
+            border-top: 5px solid #8B0000;
+            border-bottom: 5px solid #8B0000;
+            padding: 20px 0;
+        }
+        
+        body.theme-medieval .date-header {
+            background: #4B4B4B;
+            color: #E8E1D1;
+            border: none;
+            padding: 10px 20px;
+            position: relative;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        body.theme-medieval .date-header::before,
+        body.theme-medieval .date-header::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 20px;
+            background-color: #4B4B4B;
+        }
+        
+        body.theme-medieval .date-header::before {
+            left: -10px;
+            transform: skew(-20deg);
+        }
+        
+        body.theme-medieval .date-header::after {
+            right: -10px;
+            transform: skew(20deg);
+        }
+        
+        body.theme-medieval .location-badge {
+            background-color: #8B0000;
+            color: #E8E1D1;
+            border-radius: 0;
+            padding: 4px 10px;
+            text-transform: uppercase;
+            font-size: 0.7em;
+            letter-spacing: 1px;
+        }
+        
+        body.theme-medieval .meal-header {
+            background-color: #4B4B4B;
+            border-radius: 0;
+        }
+        
+        body.theme-medieval .meal-price {
+            color: #8B0000;
+            font-weight: bold;
+            font-family: 'Times New Roman', serif;
+        }
+        
+        body.theme-medieval .theme-button {
+            background-color: #8B0000;
+            color: #E8E1D1;
+            border-radius: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9em;
+            border: 1px solid #E8E1D1;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-family);
+            transition: all 0.3s ease;
+        }
+        
+        /* Apply transitions to all elements for smoother theme changes */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, background-image 0.3s ease;
+        }
+        
         .meal-card {
             border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: var(--card-shadow);
             margin-bottom: 20px;
             transition: transform 0.2s;
+            background-color: var(--card-bg);
         }
+        
         .meal-card:hover {
             transform: translateY(-5px);
         }
+        
         .meal-header {
-            background-color: #f8f9fa;
+            background-color: var(--header-bg);
             border-radius: 10px 10px 0 0;
             padding: 10px 15px;
             display: flex;
             align-items: center;
         }
+        
         .meal-content {
             padding: 15px;
         }
+        
         .meal-title {
             font-weight: bold;
             margin-bottom: 10px;
         }
+        
         .meal-price {
-            color: #28a745;
+            color: var(--primary-color);
             font-weight: bold;
         }
+        
         .meal-icon {
             width: 24px;
             height: 24px;
             margin-right: 8px;
             cursor: help;
         }
+        
         .date-header {
-            background-color: #e9ecef;
+            background-color: var(--header-bg);
             padding: 10px;
             margin-bottom: 20px;
             border-radius: 5px;
+            color: var(--text-color);
         }
+        
         .location-badge {
-            background-color: #6c757d;
+            background-color: var(--secondary-color);
             color: white;
             padding: 3px 8px;
             border-radius: 12px;
             font-size: 0.8em;
             margin-right: 5px;
         }
+        
         .icon-container {
             display: flex;
             align-items: center;
         }
+        
+        .site-header {
+            background-color: var(--header-bg);
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+        
+        .theme-selector {
+            margin-left: auto;
+        }
+        
+        .theme-button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-button:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .dropdown-menu {
+            background-color: var(--card-bg);
+        }
+        
+        .dropdown-item {
+            color: var(--text-color);
+        }
+        
+        .dropdown-item:hover {
+            background-color: var(--header-bg);
+        }
+        
+        /* Vegetarian and Vegan Alternative Styles */
+        .vegetarian-alternative, .vegan-alternative {
+            padding: 8px;
+            border-radius: 5px;
+            margin-top: 10px;
+            position: relative;
+        }
+        
+        .vegetarian-alternative {
+            background-color: rgba(40, 167, 69, 0.1);
+            border-left: 3px solid #28a745;
+        }
+        
+        .vegan-alternative {
+            background-color: rgba(0, 128, 0, 0.1);
+            border-left: 3px solid #008000;
+        }
+        
+        body.theme-cyberpunk .vegetarian-alternative {
+            background-color: rgba(0, 255, 255, 0.1);
+            border-left: 3px solid #00ffff;
+        }
+        
+        body.theme-cyberpunk .vegan-alternative {
+            background-color: rgba(0, 255, 0, 0.1);
+            border-left: 3px solid #00ff00;
+        }
+        
+        body.theme-pirate .vegetarian-alternative,
+        body.theme-pirate .vegan-alternative {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-left: 3px solid #d4af37;
+        }
+        
+        body.theme-medieval .vegetarian-alternative,
+        body.theme-medieval .vegan-alternative {
+            background-color: rgba(139, 0, 0, 0.05);
+            border-left: 3px solid #8B0000;
+        }
+        
+        /* Vegetarian and Vegan Badge Styles */
+        .vegetarian-badge {
+            background-color: #28a745;
+        }
+        
+        .vegan-badge {
+            background-color: #008000;
+        }
+        
+        body.theme-cyberpunk .vegetarian-badge {
+            background-color: #00ffff;
+            color: #000;
+        }
+        
+        body.theme-cyberpunk .vegan-badge {
+            background-color: #00ff00;
+            color: #000;
+        }
+        
+        body.theme-pirate .vegetarian-badge,
+        body.theme-pirate .vegan-badge {
+            background-color: #d4af37;
+            color: #8b4513;
+        }
+        
+        body.theme-medieval .vegetarian-badge,
+        body.theme-medieval .vegan-badge {
+            background-color: #8B0000;
+            color: #E8E1D1;
+        }
     </style>
 </head>
 <body>
+    <header class="site-header">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <h1 class="mb-0">Mensa Speiseplan</h1>
+                <div class="theme-selector ms-auto">
+                    <div class="dropdown">
+                        <button class="theme-button dropdown-toggle" type="button" id="themeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-palette"></i> Theme wählen
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="themeDropdown">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#" data-theme="default">
+                                    <span class="theme-icon default me-2">
+                                        <i class="bi bi-circle-fill" style="color: #28a745"></i>
+                                    </span>
+                                    Standard
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#" data-theme="pirate">
+                                    <span class="theme-icon pirate me-2">
+                                        <i class="bi bi-flag-fill" style="color: #8b4513"></i>
+                                    </span>
+                                    Pirate
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#" data-theme="cyberpunk">
+                                    <span class="theme-icon cyberpunk me-2">
+                                        <i class="bi bi-lightning-fill" style="color: #00ffff"></i>
+                                    </span>
+                                    Cyberpunk
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#" data-theme="medieval">
+                                    <span class="theme-icon medieval me-2">
+                                        <i class="bi bi-gem" style="color: #8B0000"></i>
+                                    </span>
+                                    Medieval
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="container py-4">
-        <h1 class="text-center mb-4">Mensa Speiseplan</h1>
-        
         {% for date, meals in meals_by_date.items() %}
         <div class="date-header">
             <h2 class="mb-0">
@@ -93,6 +510,18 @@
                         {% if meal.description %}
                             <div class="mt-2">{{ meal.description }}</div>
                         {% endif %}
+                        {% if meal.vegetarian_alternative %}
+                            <div class="mt-2 vegetarian-alternative">
+                                <span class="badge vegetarian-badge me-2">Vegetarisch</span>
+                                {{ meal.vegetarian_alternative }}
+                            </div>
+                        {% endif %}
+                        {% if meal.vegan_alternative %}
+                            <div class="mt-2 vegan-alternative">
+                                <span class="badge vegan-badge me-2">Vegan</span>
+                                {{ meal.vegan_alternative }}
+                            </div>
+                        {% endif %}
                         <div class="meal-price mt-3">
                             {% if meal.price %}
                                 {{ "%.2f"|format(meal.price) }} €
@@ -109,5 +538,75 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme names for display
+            const themeNames = {
+                'default': 'Standard',
+                'pirate': 'Pirate',
+                'cyberpunk': 'Cyberpunk',
+                'medieval': 'Medieval'
+            };
+            
+            // Theme icons
+            const themeIcons = {
+                'default': '<i class="bi bi-circle-fill" style="color: #28a745"></i>',
+                'pirate': '<i class="bi bi-flag-fill" style="color: #8b4513"></i>',
+                'cyberpunk': '<i class="bi bi-lightning-fill" style="color: #00ffff"></i>',
+                'medieval': '<i class="bi bi-gem" style="color: #8B0000"></i>'
+            };
+            
+            // Get theme selector links
+            const themeLinks = document.querySelectorAll('.dropdown-item[data-theme]');
+            
+            // Function to set the theme
+            function setTheme(theme) {
+                console.log('Setting theme to:', theme);
+                
+                // First remove all theme classes from document body
+                document.body.classList.remove('theme-pirate', 'theme-cyberpunk', 'theme-medieval');
+                
+                // Then add the selected theme class
+                if (theme !== 'default') {
+                    document.body.classList.add(`theme-${theme}`);
+                }
+                
+                // Debug check
+                console.log('Body classes after change:', document.body.className);
+                
+                // Update the theme button
+                const themeButton = document.getElementById('themeDropdown');
+                themeButton.innerHTML = `${themeIcons[theme]} ${themeNames[theme]}`;
+                
+                // Highlight the active theme in the dropdown
+                themeLinks.forEach(link => {
+                    if (link.getAttribute('data-theme') === theme) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Load saved theme from localStorage
+            const savedTheme = localStorage.getItem('mensa-theme') || 'default';
+            console.log('Initial theme:', savedTheme);
+            setTheme(savedTheme);
+            
+            // Set up theme selector click handlers
+            themeLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const theme = this.getAttribute('data-theme');
+                    console.log('Theme selected:', theme);
+                    setTheme(theme);
+                    localStorage.setItem('mensa-theme', theme);
+                });
+            });
+            
+            // Remove debug logging
+            console.log = function() {};
+        });
+    </script>
 </body>
 </html> 
